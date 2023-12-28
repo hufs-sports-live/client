@@ -1,11 +1,11 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
 import Button from '@/components/common/Button';
 import CheckboxItem from '@/components/common/Checkbox/Item';
-import Input from '@/components/common/Input/Input';
+import { Icon } from '@/components/common/Icon';
 import useValidate from '@/hooks/useValidate';
 import usePostNewLeagueMutation from '@/queries/admin/league/usePostNewLeagueMutation';
 import usePutLeagueMutation from '@/queries/admin/league/usePutLeagueMutation';
@@ -18,24 +18,23 @@ import { SportsType } from '@/types/league';
 import { updateSet } from '@/utils/set';
 import { parseTimeString } from '@/utils/time';
 
-export default function EditLeague({
+export default function LeagueDetail({
   data,
   leagueId,
   onNext,
 }: {
   data: LeagueRegisterDataType & { leagueSportsData: SportsType[] };
-  leagueId?: number;
+  leagueId: string;
   onNext?: () => void;
 }) {
   const [newLeagueData, setNewLeagueData] = useState<LeagueDataType>(
     {} as LeagueDataType,
   );
   const [newSportsData, setNewSportsData] = useState<Set<number>>(new Set());
+  const [isEditMode, setIsEditMode] = useState<boolean>(false);
 
   const { leagueData, leagueSportsData, sportsListData } = data;
   const currentLeague = leagueData.find(e => e.leagueId === Number(leagueId));
-
-  const router = useRouter();
 
   const { mutate: postLeague } = usePostNewLeagueMutation();
   const { mutate: putLeague } = usePutLeagueMutation();
@@ -109,7 +108,7 @@ export default function EditLeague({
 
     if (leagueId) {
       putLeague({
-        leagueId,
+        leagueId: Number(leagueId),
         ...payload,
       });
     } else {
@@ -119,35 +118,48 @@ export default function EditLeague({
     if (onNext) {
       onNext();
     } else {
-      router.push('/admin/league/');
+      setIsEditMode(prev => !prev);
     }
   };
 
   return (
-    <div className="space-y-8">
-      <div className="text-2xl font-medium">
-        {currentLeague ? '리그 수정' : '새 리그 등록'}
+    <>
+      <div className="flex items-center justify-between">
+        <div className="text-2xl font-medium">
+          {currentLeague
+            ? isEditMode
+              ? '리그 수정'
+              : '리그 조회'
+            : '새 리그 등록'}
+        </div>
+        {!isEditMode && (
+          <Button type="button" onClick={() => setIsEditMode(true)}>
+            <Icon iconName="pencil" />
+          </Button>
+        )}
       </div>
-      <form className="flex flex-col space-y-4" onSubmit={onSubmit}>
+      <form className="flex flex-col space-y-8" onSubmit={onSubmit}>
         <label>
           <div className="flex items-center justify-between">
             <span>리그 이름</span>
-            {isNameEmpty && (
+            {isEditMode && isNameEmpty && (
               <span className="text-sm text-red-400">필수 항목입니다.</span>
             )}
           </div>
-          <Input
+          <input
             name="name"
             type="text"
             value={newLeagueData.name}
             onChange={handleInput}
+            className="mt-2 block w-full rounded-lg border border-gray-3/70 bg-secondary/25 p-4"
+            disabled={!isEditMode}
             required
           />
         </label>
         <label>
           <div className="flex items-center justify-between">
             <span>리그 시작/종료일</span>
-            {isStartAtEmpty || isEndAtEmpty ? (
+            {(isEditMode && isStartAtEmpty) || isEndAtEmpty ? (
               <span className="text-sm text-red-400">날짜를 선택해주세요.</span>
             ) : (
               isDateError && (
@@ -157,29 +169,33 @@ export default function EditLeague({
               )
             )}
           </div>
-          <Input
+          <input
             name="startAt"
             type="date"
             value={newLeagueData.startAt}
             onChange={handleInput}
+            className="mt-2 block w-full rounded-lg border border-gray-3/70 bg-secondary/25 p-4"
             min={`2023-${month}-${date.toString().padStart(2, '0')}`}
             max={'2023-12-3'}
+            disabled={!isEditMode}
             required
           />
-          <Input
+          <input
             name="endAt"
             type="date"
             value={newLeagueData.endAt}
             onChange={handleInput}
+            className="mt-2 block w-full rounded-lg border border-gray-3/70 bg-secondary/25 p-4"
             min={`2023-${month}-${date.toString().padStart(2, '0')}`}
             max={'2023-12-3'}
+            disabled={!isEditMode}
             required
           />
         </label>
         <label>
           <div className="flex items-center justify-between">
             <span>리그 종목</span>
-            {isSportsEmpty && (
+            {isEditMode && isSportsEmpty && (
               <span className="text-sm text-red-400">
                 적어도 한 종목은 선택해주세요.
               </span>
@@ -193,19 +209,30 @@ export default function EditLeague({
               value={sportId}
               checked={newSportsData.has(+sportId)}
               onChange={() => updateCheckbox(+sportId)}
+              disabled={!isEditMode}
             >
               {name}
             </CheckboxItem>
           ))}
         </label>
-        <Button
-          className="w-full rounded-lg bg-primary p-4 text-xl text-white hover:bg-[#303ECE] disabled:bg-gray-2 disabled:text-gray-4"
-          disabled={isAnyInvalid}
-          type="submit"
-        >
-          {currentLeague ? '수정하기' : '다음으로'}
-        </Button>
+
+        {isEditMode ? (
+          <Button
+            className="w-full rounded-lg bg-[#0718AE] p-4 text-xl text-white hover:bg-[#303ECE] disabled:bg-gray-2 disabled:text-gray-4"
+            disabled={isAnyInvalid}
+            type="submit"
+          >
+            {currentLeague ? '수정하기' : '다음으로'}
+          </Button>
+        ) : (
+          <Link
+            href={`/admin/league/${leagueId}/match`}
+            className="w-full rounded-lg bg-[#0718AE] p-4 text-center text-xl text-white hover:bg-[#303ECE]"
+          >
+            이 리그의 매치 목록 조회하기
+          </Link>
+        )}
       </form>
-    </div>
+    </>
   );
 }

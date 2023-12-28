@@ -3,9 +3,8 @@
 import { ChangeEvent, useState } from 'react';
 
 import Button from '@/components/common/Button';
-import Input from '@/components/common/Input/Input';
 import useValidate from '@/hooks/useValidate';
-import usePostLoginMutation from '@/queries/useLogin/query';
+import usePostLoginMutation from '@/queries/admin/auth/usePostLoginMutation';
 import { AuthPayload } from '@/types/auth';
 
 export default function Login() {
@@ -47,11 +46,12 @@ export default function Login() {
               <span className="text-sm text-red-400">필수 항목입니다.</span>
             )}
           </div>
-          <Input
+          <input
             name="email"
             type="text"
             value={loginData.email}
             onChange={handleInput}
+            className="mt-2 block w-full rounded-lg border border-gray-3/70 bg-secondary/25 p-4"
             required
           />
         </label>
@@ -62,11 +62,12 @@ export default function Login() {
               <span className="text-sm text-red-400">필수 항목입니다.</span>
             )}
           </div>
-          <Input
+          <input
             type="password"
             name="password"
             value={loginData.password}
             onChange={handleInput}
+            className="mt-2 block w-full rounded-lg border border-gray-3/70 bg-secondary/25 p-4"
             required
           />
         </label>

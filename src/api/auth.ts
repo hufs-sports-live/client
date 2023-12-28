@@ -29,3 +29,11 @@ export const postLogin = async (body: AuthPayload) => {
 export const postGameStatus = async (id: number, gameStatus: string) => {
   adminInstance.post(`/manage/game/statustype/${id}/`, { gameStatus });
 };
+
+export const checkPermission = async () => {
+  const { data } = await adminInstance.get<number>('/accounts/permission/');
+  if (data === 400) {
+    throw new Error('해당 페이지에 접근할 권한이 없습니다');
+  }
+  return;
+};

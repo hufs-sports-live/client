@@ -1,3 +1,5 @@
+import { SportsQuarterType } from './match';
+
 export type LeagueIdType = {
   leagueId: number;
 };
@@ -10,10 +12,6 @@ export type LeagueDataType = {
 
 export type SportIdType = {
   sportId: number;
-};
-
-export type SportsQuarterType = {
-  name: string;
 };
 
 export type SportsDataType = number[];

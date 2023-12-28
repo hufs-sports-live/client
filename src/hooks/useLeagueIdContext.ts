@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { LeagueIdContext } from '@/components/admin/register/context/RegisterWrapper';
+import { LeagueIdContext } from '@/components/admin/context/LeagueIdWrapper';
 
 export const useLeagueIdContext = () => {
   const leagueIdContext = useContext(LeagueIdContext);

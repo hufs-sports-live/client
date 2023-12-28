@@ -5,7 +5,6 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
 import Button from '@/components/common/Button';
 import CheckboxItem from '@/components/common/Checkbox/Item';
-import Input from '@/components/common/Input/Input';
 import useValidate from '@/hooks/useValidate';
 import usePostNewLeagueMutation from '@/queries/admin/league/usePostNewLeagueMutation';
 import usePutLeagueMutation from '@/queries/admin/league/usePutLeagueMutation';
@@ -111,7 +110,7 @@ export default function RegisterLeague({
   };
 
   return (
-    <div className="space-y-8">
+    <>
       <div className="text-2xl font-medium">
         {currentLeague ? '리그 수정' : '새 리그 등록'}
       </div>
@@ -123,11 +122,12 @@ export default function RegisterLeague({
               <span className="text-sm text-red-400">필수 항목입니다.</span>
             )}
           </div>
-          <Input
+          <input
             name="name"
             type="text"
             value={newLeagueData.name}
             onChange={handleInput}
+            className="mt-2 block w-full rounded-lg border border-gray-3/70 bg-secondary/25 p-4"
             required
           />
         </label>
@@ -144,20 +144,22 @@ export default function RegisterLeague({
               )
             )}
           </div>
-          <Input
+          <input
             name="startAt"
             type="date"
             value={newLeagueData.startAt}
             onChange={handleInput}
+            className="mt-2 block w-full rounded-lg border border-gray-3/70 bg-secondary/25 p-4"
             min={`2023-${month}-${date.toString().padStart(2, '0')}`}
             max={'2023-12-3'}
             required
           />
-          <Input
+          <input
             name="endAt"
             type="date"
             value={newLeagueData.endAt}
             onChange={handleInput}
+            className="mt-2 block w-full rounded-lg border border-gray-3/70 bg-secondary/25 p-4"
             min={`2023-${month}-${date.toString().padStart(2, '0')}`}
             max={'2023-12-3'}
             required
@@ -186,13 +188,13 @@ export default function RegisterLeague({
           ))}
         </label>
         <Button
-          className="w-full rounded-lg bg-primary p-4 text-xl text-white hover:bg-[#303ECE] disabled:bg-gray-2 disabled:text-gray-4"
+          className="w-full rounded-lg bg-[#0718AE] p-4 text-xl text-white hover:bg-[#303ECE] disabled:bg-gray-2 disabled:text-gray-4"
           disabled={isAnyInvalid}
           type="submit"
         >
           {currentLeague ? '수정하기' : '다음으로'}
         </Button>
       </form>
-    </div>
+    </>
   );
 }

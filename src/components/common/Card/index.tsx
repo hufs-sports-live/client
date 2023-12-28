@@ -10,7 +10,7 @@ export default function Card({ children, className }: CardProps) {
   return (
     <div
       className={$(
-        'flex flex-col gap-4 rounded-xl bg-gray-1 p-4 transition-all hover:shadow',
+        'flex flex-col gap-4 rounded-xl border border-gray-3 bg-gray-1 p-4 transition hover:bg-white hover:shadow-lg',
         className,
       )}
     >

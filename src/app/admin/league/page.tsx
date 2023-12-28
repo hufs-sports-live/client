@@ -10,13 +10,11 @@ const LeagueListFetcher = dynamic(
   () => import('@/queries/admin/league/useLeagueList/Fetcher'),
   { ssr: false },
 );
-const LeagueList = dynamic(
-  () => import('@/components/admin/league/LeagueList'),
-);
+const LeagueList = dynamic(() => import('@/components/admin/league/list'));
 
-export default function LeaguePage() {
+export default function Page() {
   return (
-    <div className="space-y-8">
+    <>
       <div className="text-2xl font-medium">전체 리그</div>
       <Suspense fallback={<div>리그 로딩중...</div>}>
         <LeagueListFetcher>
@@ -28,6 +26,6 @@ export default function LeaguePage() {
           새 리그 등록
         </Link>
       </Button>
-    </div>
+    </>
   );
 }

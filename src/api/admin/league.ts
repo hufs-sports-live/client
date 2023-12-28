@@ -6,7 +6,6 @@ import {
   NewLeaguePayload,
   PutLeaguePayload,
   SportsCategoriesType,
-  SportsQuarterType,
 } from '@/types/admin/league';
 
 export const getAllLeaguesWithAuth = async () => {
@@ -35,14 +34,6 @@ export const putLeagueWithAuth = async (data: PutLeaguePayload) => {
 
 export const getSportsCategoriesWithAuth = async () => {
   const { data } = await adminInstance.get<SportsCategoriesType[]>('/sport/');
-
-  return data;
-};
-
-export const getSportsQuarterByIdWithAuth = async (sportId: string) => {
-  const { data } = await adminInstance.get<SportsQuarterType[]>(
-    `/sport/${sportId}/quarter/`,
-  );
 
   return data;
 };

@@ -45,10 +45,10 @@ export default function LeagueList({ data }: { data: LeagueType[] }) {
                 className="w-full rounded-lg bg-secondary p-3 text-gray-5 hover:bg-[#9AB0D3] hover:text-white"
               >
                 <Link
-                  href={`/admin/register/${league.leagueId}`}
+                  href={`/admin/league/${league.leagueId}`}
                   className="w-full"
                 >
-                  수정하기
+                  조회하기
                 </Link>
               </Button>
               <Button

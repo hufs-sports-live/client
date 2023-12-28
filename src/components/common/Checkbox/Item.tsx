@@ -14,6 +14,7 @@ export default function CheckboxItem({
   children,
   checked,
   onChange,
+  disabled,
 }: ComponentProps<'input'>) {
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -28,7 +29,7 @@ export default function CheckboxItem({
       <Button
         className={$(
           'mt-2 w-full gap-2 rounded-lg border border-gray-3/70 p-4 transition-colors duration-100',
-          checked ? 'bg-[#0718AE] text-white' : 'bg-secondary/25',
+          checked ? 'bg-primary text-white' : 'bg-secondary/25',
         )}
         type="button"
         onClick={onClick}
@@ -45,6 +46,7 @@ export default function CheckboxItem({
         checked={checked}
         ref={inputRef}
         onChange={onChange}
+        disabled={disabled}
         className="hidden"
       />
     </>
